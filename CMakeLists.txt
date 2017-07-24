@@ -13,4 +13,4 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -g -Wextra -pedantic")
 
 add_executable(solver ${SOURCES} ${HEADERS})
 
-set_property(TARGET aim PROPERTY CXX_STANDARD 17)
+set_property(TARGET solver PROPERTY CXX_STANDARD 11)
