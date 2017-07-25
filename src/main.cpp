@@ -5,19 +5,25 @@
 #include <fstream>
 #include <iostream>
 
-template <typename T>
+using Coordinate_t = std::uint32_t;
+using Rotate_t = float;
+
+
 struct Point {
-        using value_t = T;
-        value_t x;
-        value_t y;
+        Coordinate_t x;
+        Coordinate_t y;
 };
 
-template <typename T>
-struct Shape {
-        using coordinate_t = T;
-        using point_t = Point<coordinate_t>;
 
-        std::vector<point_t> vertices;
+struct Shape {
+        std::vector<Point> vertices;
+};
+
+
+struct Object {
+        Shape shape;
+        Rotate_t tilt;
+        Point position;
 };
 
 struct IReader {
@@ -25,14 +31,13 @@ struct IReader {
 
 
 struct PlainTextReader : IReader {
-        template <typename T>
-        Shape<T> extract(std::istream& stream) {
-                Shape<T> ret;
+        Shape extract(std::istream& stream) {
+                Shape ret;
                 while(!stream.eof() && stream.good()) {
-                        T x{0};
-                        T y{0};
+                        Coordinate_t x{0};
+                        Coordinate_t y{0};
                         stream >> x >> y;
-                        Point<T> point{x, y};
+                        Point point{x, y};
                         ret.vertices.push_back(point);
                 }
                 return ret;
@@ -47,7 +52,7 @@ int main() {
         }
 
         PlainTextReader reader;
-        const auto external_shape = reader.extract<std::uint32_t>(file);
+        const auto external_shape = reader.extract(file);
         for(auto&& point : external_shape.vertices)
                 std::cout << point.x << ' ' << point.y << '\n';
 
